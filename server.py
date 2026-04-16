@@ -16,7 +16,8 @@ import time
 import asyncio
 from typing import Optional, List, Dict, Any
 from enum import Enum
-from pydantic import BaseModel, Field, field_validator
+import httpx
+from pydantic import BaseModel, Field, ConfigDict, field_validator
 from mcp.server.fastmcp import FastMCP
 
 # ---------------------------------------------------------------------------
@@ -970,55 +971,3 @@ async def shopify_create_webhook(params: CreateWebhookInput) -> str:
 # ---------------------------------------------------------------------------
 if __name__ == "__main__":
     mcp.run(transport=MCP_TRANSPORT)
-  # New tool to automate specific product data enrichment
-@mcp.tool()
-async def enrich_product_data(product_id: str) -> str:
-    """
-    Automates generating and updating Metafields (Color Group, Size Chart)
-    for a single Shopify product.
-    """
-    try:
-        # 1. Generate metafield data (using default mocks for now)
-        # In a real scenario, you might call Claude here to generate rich data.
-        color_group_value = DEFAULT_COLOR_GROUP
-        size_chart_value = DEFAULT_SIZE_CHART_HTML
-
-        # 2. Prepare metafields for Shopify Admin API
-        metafields = [
-            {
-                "namespace": "custom",
-                "key": "color_group",
-                "value": color_group_value, # True/False
-                "type": "boolean"
-            },
-            {
-                "namespace": "custom",
-                "key": "size_chart",
-                "value": size_chart_value, # HTML table
-                "type": "rich_text_field" # Or "html" depending on configuration
-            }
-        ]
-
-        # 3. Call Shopify Admin API to update product metafields
-        # Using the existing request mechanism in server.py
-        # Assuming product_id is just the numeric ID, not the GID
-        endpoint = f"products/{product_id}.json"
-        data = {
-            "product": {
-                "id": product_id,
-                "metafields": metafields
-            }
-        }
-
-        # Make the PUT request to update
-        # Assumption: The existing server.py uses `request` method for API calls
-        response = await request("PUT", endpoint, body=json.dumps(data))
-
-        # Check for errors in response (simple example, enhance as needed)
-        if "errors" in response:
-            return f"❌ Error updating product Metafields: {response['errors']}"
-
-        return f"✅ Successfully updated 'color_group' and 'size_chart' Metafields for product ID {product_id}!"
-
-    except Exception as e:
-        return f"❌ An unexpected error occurred: {str(e)}"
