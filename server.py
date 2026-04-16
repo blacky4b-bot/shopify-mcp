@@ -19,33 +19,6 @@ from enum import Enum
 from pydantic import BaseModel, Field, field_validator
 from mcp.server.fastmcp import FastMCP
 
-# Mock data for Metafields (Color Group and Size Chart)
-DEFAULT_COLOR_GROUP = "True"  # Or "True" or "False" based on typical requirement
-DEFAULT_SIZE_CHART_HTML = """
-<table border="1">
-  <tr>
-    <th>Size (US)</th>
-    <th>Chest (inches)</th>
-    <th>Sleeve (inches)</th>
-  </tr>
-  <tr>
-    <td>S</td>
-    <td>36-38</td>
-    <td>31.5</td>
-  </tr>
-  <tr>
-    <td>M</td>
-    <td>39-41</td>
-    <td>32.5</td>
-  </tr>
-    <tr>
-    <td>L</td>
-    <td>42-44</td>
-    <td>33.5</td>
-  </tr>
-</table>
-"""
-
 # ---------------------------------------------------------------------------
 # Configuration
 # ---------------------------------------------------------------------------
